@@ -11,10 +11,10 @@ struct ParentView: View {
     let store: StoreOf<ParentFeature>
 
     var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
-            NavigationStackStore(
-                self.store.scope(state: \.path, action: { .path($0) })
-            ) {
+        NavigationStackStore(
+            self.store.scope(state: \.path, action: { .path($0) })
+        ) {
+            WithViewStore(self.store, observe: { $0 }) { viewStore in
                 VStack {
                     CustomTextField(
                         store: self.store.scope(
@@ -28,14 +28,14 @@ struct ParentView: View {
                         viewStore.send(.navigateToScreenA)
                     }
                 }
-            } destination: { state in
-                switch state {
-                case .screenA:
-                    CaseLet(/Destination.State.screenA,
-                            action: Destination.Action.screenA,
-                            then: ScreenAView.init
-                    )
-                }
+            }
+        } destination: { state in
+            switch state {
+            case .screenA:
+                CaseLet(/Destination.State.screenA,
+                        action: Destination.Action.screenA,
+                        then: ScreenAView.init
+                )
             }
         }
     }
