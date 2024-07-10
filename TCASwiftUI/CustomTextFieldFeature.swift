@@ -13,18 +13,26 @@ struct CustomTextFieldFeature: Reducer {
     }
 
     enum Action: BindableAction, Equatable {
+        // output
+        case submit(keyword: String?)
+        // private
         case binding(BindingAction<State>)
-        case submitTapped
+        case didTapSubmitbutton
     }
 
     var body: some ReducerOf<Self> {
         BindingReducer()
         Reduce { state, action in
             switch action {
+            case .submit(_):
+                return .none
             case .binding:
                 return .none
-            case .submitTapped:
-                return .none
+            case .didTapSubmitbutton:
+                let keyword = state.text
+                return .run { send in
+                    await send(.submit(keyword: keyword))
+                }
             }
         }
     }

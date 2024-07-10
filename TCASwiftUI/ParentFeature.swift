@@ -9,13 +9,13 @@ import ComposableArchitecture
 
 struct ParentFeature: Reducer {
     struct State: Equatable {
-        var textField: CustomTextFieldFeature.State = .init()
-        var submittedText: String = ""
+        var textFieldFeature: CustomTextFieldFeature.State = .init()
+        var submittedText: String? = ""
         var path = StackState<Destination.State>()
     }
 
     enum Action {
-        case textField(CustomTextFieldFeature.Action)
+        case textFieldFeature(CustomTextFieldFeature.Action)
         case path(StackAction<Destination.State, Destination.Action>)
         case navigateToScreenA
     }
@@ -23,12 +23,13 @@ struct ParentFeature: Reducer {
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .textField(.submitTapped):
-                state.submittedText = state.textField.text
-                state.textField.text = ""
+            // MARK: - textFieldReducer
+            case let .textFieldFeature(.submit(keyword: keyword)):
+                state.submittedText = keyword
                 return .none
-            case .textField:
+            case .textFieldFeature(_):
                 return .none
+            // MARK: - others
             case .path:
                 return .none
             case .navigateToScreenA:
@@ -36,7 +37,7 @@ struct ParentFeature: Reducer {
                 return .none
             }
         }
-        Scope(state: \.textField, action: /Action.textField) {
+        Scope(state: \.textFieldFeature, action: /Action.textFieldFeature) {
             CustomTextFieldFeature()
         }
         .forEach(\.path, action: /Action.path) {

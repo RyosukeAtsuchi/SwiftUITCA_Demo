@@ -22,7 +22,7 @@ struct CustomTextField: View {
                     .padding()
 
                 Button("Submit") {
-                    viewStore.send(.submitTapped)
+                    viewStore.send(.didTapSubmitbutton)
                 }
             }
         }

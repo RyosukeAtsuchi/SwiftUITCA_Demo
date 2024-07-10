@@ -13,14 +13,16 @@ struct ScreenAView: View {
 
     var body: some View {
         WithViewStore(self.store, observe: {$0}) { viewStore in
-            Text("Data from parent: \(viewStore.dataFromParent)")
+            if let dataFromParent = viewStore.dataFromParent {
+                Text("Data from parent: \(dataFromParent)")
+            }
         }
     }
 }
 
 struct ScreenAReducer: Reducer {
     struct State: Equatable {
-        let dataFromParent: String
+        let dataFromParent: String?
     }
 
     enum Action: Equatable {

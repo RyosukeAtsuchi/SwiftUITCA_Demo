@@ -18,12 +18,14 @@ struct ParentView: View {
                 VStack {
                     CustomTextField(
                         store: self.store.scope(
-                            state: \.textField,
-                            action: ParentFeature.Action.textField
+                            state: \.textFieldFeature,
+                            action: ParentFeature.Action.textFieldFeature
                         ),
                         placeholder: "Enter text"
                     )
-                    Text("Submitted Text: \(viewStore.submittedText)")
+                    if let text = viewStore.submittedText {
+                        Text("Submitted Text: \(text)")
+                    }
                     Button("GOtoScreenA") {
                         viewStore.send(.navigateToScreenA)
                     }
